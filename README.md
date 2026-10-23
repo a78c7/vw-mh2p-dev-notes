@@ -17,6 +17,8 @@ MH2p（MIB2+ High）是大众集团多个品牌共用的车机平台。据 [MH2p
 
 ## 目录
 
+### 开发过程（按做的顺序）
+
 | 篇 | 内容 |
 | --- | --- |
 | [01 调试环境与工具](docs/01-调试环境与工具.md) | SSH、Mac 用的 USB 网卡驱动、QNX 交叉编译的坑、不导出车机文件编译插件（桩类）、车机自带的 dmdt 调试工具、车机 shell 和时钟的限制、无效值 |
@@ -25,6 +27,17 @@ MH2p（MIB2+ High）是大众集团多个品牌共用的车机平台。据 [MH2p
 | [04 仪表信息框](docs/04-仪表信息框.md) | 从车机读功率/扭矩/G 值/油温等实时数据画在仪表地图上；0–100 计时、最大值、扭矩口径实测、行车记录到 U 盘、左右两个框 |
 | [05 全屏 CarPlay 与 U 盘包](docs/05-全屏CarPlay与U盘包.md) | 在车上就地打补丁（不分发大众文件）、「改装设置」程序 |
 | [06 给其他车型的建议](docs/06-给其他车型的建议.md) | 换一台 MH2p 车（大众、奥迪、保时捷、兰博基尼 Urus），先查哪些东西、哪些能复用 |
+
+### 平台参考（按系统整理，查资料用）
+
+| 篇 | 内容 |
+| --- | --- |
+| [平台参考说明](reference/README.md) | 标注方法、这里不写什么（不放大众文件、不涉及任何保护机制的绕过） |
+| [R1 系统结构与文件位置](reference/R1-系统结构与文件位置.md) | 分区和挂载、主要进程、配置文件、ModKit 脚本机制、重启方法、网络和防火墙 |
+| [R2 HMI（J9 Java）](reference/R2-HMI-J9-Java.md) | 插件加载、编译要求、读车辆数据、datapool / ASL 列表编号、BAP NavSD、显示管理接口 |
+| [R3 车辆数据接口](reference/R3-车辆数据接口.md) | DSICarVehicleStates、DSICarKombi 属性编号、字段、单位、刷新率、无效值（实测表） |
+| [R4 显示系统](reference/R4-显示系统.md) | 屏幕和 displayable 编号、仪表上谁画什么、画到屏上的方法、dmdt |
+| [R5 CarPlay 与 iAP2](reference/R5-CarPlay与iAP2.md) | 可拦截的 libairplay 函数、路线指引字段、第二屏、车机命令、安全区 |
 
 ## 标注说明
 
@@ -59,5 +72,7 @@ Development notes (Chinese) from building these mods on a 2023 China-market VW T
 - **Live info box** (power, torque, G, rpm, oil temperatures, board-computer values) from `DSICarVehicleStates` / `DSICarKombi`, blended over the cluster map; 0–100 km/h timing interpolated between samples, session maxima, a CSV drive log to a USB drive (Java writes chunks to `/tmp`, a root boot loop appends them to the drive), invalid sentinel values (-3276.5, 32770), two boxes sharing one renderer.
 - **Building without dumping the head unit**: compile-only stubs generated from the constant pool of an already-published plugin jar; rebuilt classes are byte-identical.
 - **Full-screen CarPlay** patched on the car (38 bytes in two entries of `skin3/viewhandler.zip`), so no VW file is distributed.
+
+A system-organized platform reference (partitions, processes, HMI plug-in loading, datapool / BAP numbers, DSI vehicle-data tables with measured units and invalid values, display / displayable ids, libairplay hooks, iAP2 route-guidance fields) is in [`reference/`](reference/README.md). No VW files, nothing about bypassing any protection (component protection, feature activation, signatures).
 
 Binaries and sources: [a78c7/touareg-cn-carplay-mods](https://github.com/a78c7/touareg-cn-carplay-mods). Not affiliated with Volkswagen or Apple. Text licensed CC BY-SA 4.0.
