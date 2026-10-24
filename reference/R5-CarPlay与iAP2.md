@@ -89,6 +89,15 @@
 
 - 想让车标更低：在 `/info` 里把仪表屏报成 1920×960（物理高度按比例放大，像素密度不变），显示时只取中间 640 行。手机按 960 高的画面放车标，落到仪表上就靠下。【途锐实测】
 
-## 7. CarPlay Ultra
+## 7. 空闲心跳（加了第二屏以后要处理）
+
+【途锐实测，libairplay 320.17.1】
+
+- 中控视频流被拆掉时（手机把画面交回车机，日志 `Modes changed: screen accessory`），libairplay 启动 `_IdleStateKeepAliveThread`（线程名 `AirPlayKeepAliveReceiver`），等手机发心跳。**30 秒收不到**就 `kTimeoutErr -6722`、`AirPlay session ended: Dur=30 seconds`，`dio_manager` 重启、重连。
+- 手机只在**没有任何流**时才发心跳。第二屏（stream 111）是自己的钩子接收的，libairplay 不知道它存在：仪表视频一直在传，手机不发心跳，libairplay 却以为没流了，于是车机一显示原车界面，CarPlay 就每 30 秒断一次；重连后还停在原车界面，就一直循环。
+- 这个线程就是一个 `select()`（读集合：心跳 socket + 退出管道，超时 30 秒，返回 0 判超时）。`select` 从 libc 导入，`LD_PRELOAD` 能拦：只处理这个线程名、超时 ≥ 20 秒的调用，分段等待，第二屏还在收包就重置倒计时；第二屏也停了，按原来的 30 秒超时。
+- 另一种断开 `CarPlayControlClientSTALeft` 是手机 Wi-Fi 离开了车机热点，属于无线链路问题，和这里无关。
+
+## 8. CarPlay Ultra
 
 纸面调研的结论：在这个平台上做不了完整的 Ultra。主题资产由苹果按车厂的 MFi 证书和资产编号下发，本地渲染器和资产格式不公开，新的同步、车辆状态协议也没有公开文档；这版 libairplay 也不包含这些功能。能做的只是一些子集，比如在仪表地图上叠加自绘的车辆数据。【未验证：没上车试】
