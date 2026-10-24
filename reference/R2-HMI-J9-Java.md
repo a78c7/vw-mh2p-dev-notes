@@ -72,6 +72,7 @@
 | `updateBapDistanceToDestination(米, 255, 类型)` | 剩余距离，单位 255 = 由 HMI 自动选 km/m | 【途锐实测】 |
 | `updateBapTimeToDestination2(时, 分, 格式)` | 同时更新剩余时间和到达时间（到达时间 = 车机当前时间 + 剩余时间） | 【途锐实测】 |
 
+- 仪表上的地图缩放（方向盘上下键）走反方向：仪表通过 NavSD **MapScale** 发给车机，车机调用 `NavigationService.incrementZoomIndex / decrementZoomIndex`（长按每 500 ms 一步），作用在原车仪表地图上。这个服务对象放在 `APIFactory.navigationService` 静态字段里，可以用反射换成一个包装类：想自己处理缩放时拦下这两个方法，其余方法原样转发；同时让"已到最大/最小"返回否，否则按键会被原车吞掉。【途锐实测】
 - FctID 38（InfoStates）在 CarPlay 路线指引激活时发 6，仪表就显示"导航已在移动设备上激活"。整个程序里只有它调用 `isCarPlayRouteGuidanceActive()`。【途锐实测】
 
 ## 8. 显示管理接口
