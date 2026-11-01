@@ -47,6 +47,8 @@
 
 "正在导航"的判断：会话有效、路线状态 ≥ 1 且 ≠ 2、App 支持路线指引。【途锐实测】
 
+**有线和无线是两套 iAP2**：无线走大众 `libesoiap2`（类 `CIAP2Link`、`CIAP2ControlSession`）；有线走 Cinemo NME（`/dev/otg-cinemo`，`libNmeSDK.so` / `libNmeVfs.so` / `libNmeBaseClasses.so`）。两边都要补路线指引声明，Cinemo 一侧的拦截点：`NmeIAP2Message::Encode` / `Decode`（经 PLT，可 `LD_PRELOAD`）、`CinemoCreateIAP`、`ICinemoIAP_StartRouteGuidanceUpdates`。Cinemo 自带的路线指引解析只覆盖 0x5201 参数 0–15（没有 SourceName 和车道），所以按原始字节自己解析。详见 [02 篇](../docs/02-CarPlay导航上HUD.md) 第 10 节。【途锐实测】
+
 ## 4. 第二屏（仪表地图，altScreen）
 
 【途锐实测】
