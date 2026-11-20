@@ -1,4 +1,10 @@
-# 大众 MH2p 车机改装开发笔记（非官方）
+# 大众 MH2p 车机改装开发笔记（已合并至主仓库归档）
+
+> **归档说明 / Archive Notice**：
+> 本仓库的全部开发笔记（`01～07` 篇，含新增无线控制台与 SSH 开发）与 MH2p 平台参考手册（`R1～R5`）已完整合并至主仓库 **[a78c7/touareg-cn-carplay-mods/docs/](https://github.com/a78c7/touareg-cn-carplay-mods/tree/main/docs)**（适用于大众、奥迪、保时捷 PCM 5、宾利、兰博基尼同平台 MH2p 车机参考）。
+> 本仓库保留原有文件以保证外部已有链接继续有效，后续更新请直接前往主仓库查看。
+>
+> *All chapters (`01–07`) and platform reference manuals (`R1–R5`) have been merged into **[a78c7/touareg-cn-carplay-mods/docs/](https://github.com/a78c7/touareg-cn-carplay-mods/tree/main/docs)**. Existing files are kept here so old links stay valid; this repository is now archived.*
 
 在一台 2023 款国产途锐（车机 MH2p_CN_VWG36_P2878）上，从零做出下面几项改装的完整开发过程：每一步遇到什么问题、怎么查到原因、怎么解决。写给想在别的 MH2p 车上自己动手的人作参考。
 
